@@ -5,7 +5,6 @@ const express = require('express');
 const fs = require('file-system')
 const morgan = require('morgan');
 
-
 const credentials = require('./middleware/credentials')
 const cors = require('cors');
 const corsOptions = require('./config/corsOptions');
@@ -19,6 +18,8 @@ const { errorHandler } = require('./middleware/eventHandler')
 const { logHandler } = require('./middleware/eventHandler')
 
 const database = require('./config/dbHandler');
+
+const accessHandler = require('./middleware/accessHandler')
 
 //***************STARTUP***************
 const app = express();
@@ -58,16 +59,21 @@ app.use(errorHandler);
 
 
 
+
+
 //*******************ROUTER*******************
+app.use(accessHandler)
 app.use('/register', require('./router/register.router'))
 app.use('/authentication', require('./router/authentication.router'))
 app.use('/file', require('./router/file.router'))
+app.use('/permission', require('./router/permission.router'))
 
 //*******************STARTUP*******************
 app.listen(process.env.API_PORT, process.env.API_DOMAIN, () => {
     console.log(Date.now() + " " + process.env.API_STARTED + process.env.API_DOMAIN + ':' + process.env.API_PORT)
 });
 app.get('/', function (req, res) {
+
     res.status(200).send({
         timestamp: Date.now(),
         message: process.env.API_STARTED + process.env.API_DOMAIN + ':' + process.env.API_PORT

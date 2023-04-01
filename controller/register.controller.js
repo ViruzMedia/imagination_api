@@ -25,7 +25,7 @@ const handleNewAccount = async (req, res) => {
                     const result = await account_schema.create({
                         "username": username,
                         "email": email,
-                        "password": password_hash
+                        "password": password_hash,
                     })
 
                     console.log(result)

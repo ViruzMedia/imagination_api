@@ -15,6 +15,7 @@ const handleAuthentication = async (req, res) => {
         return res.status(400).json({ message: 'password is a required field!' })
     } else {
         const getUserFromDB = await account_schema.findOne({ username: username }).exec()
+        console.log(getUserFromDB)
         if (!getUserFromDB) {
             return res.status(401).json({ message: `no user with name ${username} found!` })
         } else {
@@ -22,8 +23,20 @@ const handleAuthentication = async (req, res) => {
             const match = await bcrypt.compare(password, getUserFromDB.password)
             if (match) {
                 //create JWT
-                const accessToken = jwt.sign({ "username": getUserFromDB.username }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXP })
-                const refreshToken = jwt.sign({ "username": getUserFromDB.username }, process.env.REFRESH_TOKEN_SECRET, { expiresIn: process.env.REFRESH_TOKEN_EXP })
+                const accessToken = jwt.sign(
+                    {
+                        "UserInfo": {
+                            "username": getUserFromDB.username,
+                            "role": getUserFromDB.role
+                        }
+                    },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: process.env.ACCESS_TOKEN_EXP })
+
+                const refreshToken = jwt.sign(
+                    { "username": getUserFromDB.username },
+                    process.env.REFRESH_TOKEN_SECRET,
+                    { expiresIn: process.env.REFRESH_TOKEN_EXP })
 
                 //update RefreshToken @ Database
                 await account_schema.findByIdAndUpdate(getUserFromDB._id, { refreshToken: refreshToken });
@@ -54,8 +67,14 @@ const handleRefreshToken = async (req, res) => {
             console.log(err)
             return res.sendStatus(403) //forbidden
         } else {
-            const accessToken = jwt.sign({ "username": decode.username }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXP })
-            res.json({ accessToken })
+            const accessToken = jwt.sign({
+                "UserInfo": {
+                    "username": decode.username,
+                    "role": result.role
+                }
+            }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: process.env.ACCESS_TOKEN_EXP })
+            
+                res.json({ accessToken })
         }
 
     }
