@@ -4,7 +4,7 @@ require('dotenv').config()
 const express = require('express');
 const fs = require('file-system')
 const morgan = require('morgan');
-const accessLogStream = fs.createWriteStream('./log/devAccess.log', { flags: 'a' });
+
 
 const credentials = require('./middleware/credentials')
 const cors = require('cors');
@@ -15,8 +15,8 @@ const fileUploadOptions = require("./config/uploadOptions")
 
 const cookieParser = require('cookie-parser');
 
-const { errorHandler } = require('./log/eventHandler')
-const { logHandler } = require('./log/eventHandler')
+const { errorHandler } = require('./middleware/eventHandler')
+const { logHandler } = require('./middleware/eventHandler')
 
 const database = require('./config/dbHandler');
 

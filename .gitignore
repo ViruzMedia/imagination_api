@@ -1,5 +1,4 @@
 .env
 node_modules
 upload
-.log
-log/.log
+log
