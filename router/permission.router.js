@@ -8,9 +8,18 @@ const permissionController = require('../controller/permission.controller');
 const router = express.Router();
 
 router.route('/role')
-    .post(permissionController.handleNewRole)
+    .get(permissionController.handleGetRole)
+    .post(permissionController.handlePostRole)
+    .put(permissionController.handlePutRole)
+    .delete(permissionController.handleDeleteRole)
 
 router.route('/route')
-    .post(permissionController.handleNewRoute)
+    .get(permissionController.handleGetRoute)
+    .post(permissionController.handlePostRoute)
+    .put(permissionController.handlePutRoute)
+    .delete(permissionController.handleDeleteRoute)
+
+router.route('/account')
+    .put(permissionController.updateAccountPermission)
 
 module.exports = router
