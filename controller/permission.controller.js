@@ -46,9 +46,16 @@ const handlePostRoute = async (req, res) => {
     if (!type || !path || !method) return res.status(400).json({ "message": "There is a Type, path & Method required" })
 
     //check for duplicate
-    const duplicate_path = await routeSchema.findOne({ path: path }).exec()
+    const duplicate_path = await routeSchema.findOne({ path: path, method: method })
+    console.log(duplicate_path)
+    // console.log(duplicate_path.path)
+    console.log(path)
+    //console.log(duplicate_path.method.toUpperCase())
+    console.log(req.body.method.toUpperCase())
     if (duplicate_path) {
-        return res.status(400).json({ message: 'this route already exists!' })
+        if (duplicate_path.path == path && duplicate_path.method.toUpperCase() == req.body.method.toUpperCase()) {
+            return res.status(400).json({ message: 'this route already exists!' })
+        }
     } else {
         try {
             const result = await routeSchema.create({
@@ -58,11 +65,12 @@ const handlePostRoute = async (req, res) => {
                 "priority": priority
             })
             console.log(result)
-            res.status(201).json({ message: `New Route < ${path} > created!` })
+            res.status(201).json({ message: `New Route < ${path} > with method < ${method} > created!` })
         } catch (err) {
             res.status(500).json({ message: err.message })
         }
     }
+
 }
 
 const handleGetRole = async (req, res) => {
@@ -134,6 +142,7 @@ const handleDeleteRole = async (req, res) => {
         res.status(500).json({ message: err.message })
     }
 }
+
 const handleDeleteRoute = async (req, res) => {
     const search_id = req.body.id;
     if (!search_id) return res.status(400).json({ "message": "There is a id required to Delete something!" })

@@ -5,15 +5,15 @@ const routeSchema = require('../database/schema/route.schema')
 const account_schema = require('../database/schema/account.schema')
 
 const handleAccess = async (req, res, next) => {
-    const authHeader = req.headers.authorization || req.headers.Authorization;
-    const resultRoute = await routeSchema.findOne({ path: req.path }).exec()
 
-    if (!resultRoute || !req.path) return res.sendStatus(401);
-    if (resultRoute.path == req.path && resultRoute.priority == 0) {
+    const authHeader = req.headers.authorization || req.headers.Authorization;
+    const resultRoute = await routeSchema.findOne({ path: req.path, method: req.method.toLowerCase() }).exec();
+    if (!resultRoute || !req.path || !req.method) return res.sendStatus(401);
+    if (resultRoute.path == req.path && resultRoute.method.toUpperCase() == req.method && resultRoute.priority == 0) {
+        console.log("fine passed")
         next() //passed ! NO PERMISSION REQUIRED!
     } else {
         if (!authHeader?.startsWith('Bearer ')) return res.sendStatus(401);
-        //console.log(authHeader);
         const token = authHeader.split(' ')[1];
         jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, decoded) => {
             if (err) return res.sendStatus(403);//vorbidden invalid token
