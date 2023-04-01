@@ -1,0 +1,33 @@
+#API VARIABLES
+API_WEB_DOMAIN="localhost"
+API_DOMAIN="0.0.0.0"
+API_PORT="1888"
+API_URLENCODED="false"
+API_STARTED="The Application Programming Interface for Coffee-Apps is ONLINE under: "
+
+#this is required for production chrome! just activate it and deactivate the empty thing if you want to produce
+COOKIE_SETTING_PRODUCTION="httpOnly: true, sameSite: 'None', secure: true,"
+#COOKIE_SETTING_PRODUCTION="httpOnly: true"
+
+#DATABASE VARIABLES
+DB_STRING="**MONGO-DB-STRING**"
+DB_USENEWURLPARSER="true"
+DB_ONLINE="database connection initialized"
+
+#FILE SETTINGS
+FILE_MB="5"
+VIDEO_MB="2048"
+GIF_MB="45"
+FILE_SIZE_LIMIT="MB * 1024 * 1024"
+FILE_EXT_LIMIT=['.png', '.jpg', '.jpeg', '.PNG']
+
+#JSON WEBTOKEN SETTINGS
+ACCESS_TOKEN_SECRET="enter here a secret!"
+ACCESS_TOKEN_EXP='60s' #change in production to a longer duration (prob. 5 min)
+REFRESH_TOKEN_SECRET="enter here a secret!"
+REFRESH_TOKEN_EXP='1d'
+IMAGE_TOKEN_SECRET="enter here a secret!"
+IMAGE_TOKEN_EXP='7d'
+
+
+
