@@ -61,8 +61,7 @@ app.use(errorHandler);
 //*******************ROUTER*******************
 app.use('/register', require('./router/register.router'))
 app.use('/authentication', require('./router/authentication.router'))
-app.use('/upload', require('./router/upload.router'))
-app.use('/file', require('./router/display.router'))
+app.use('/file', require('./router/file.router'))
 
 //*******************STARTUP*******************
 app.listen(process.env.API_PORT, process.env.API_DOMAIN, () => {
